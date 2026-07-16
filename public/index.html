@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusHub — Event Discovery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1B4332', 'primary-l': '#2D6A4F', 'primary-ll': '#40916C', 'primary-p': '#D8F3DC',
+                        accent: '#E07A5F', 'accent-d': '#C65D3F', 'accent-p': '#FDE8E0',
+                        cream: '#F7F5F0', 'cream-d': '#F0EDE6', 'cream-dd': '#E8E4DD',
+                        ink: '#1A1A2E', 'ink-l': '#3D3D56', muted: '#7A7A8E', card: '#FFFFFF',
+                        tech: '#2563EB', cultural: '#DB2777', sports: '#D97706', seminar: '#7C3AED', workshop: '#059669',
+                        border: '#E8E4DD', sidebar: '#1A1A2E', 'sidebar-l': '#242442'
+                    },
+                    fontFamily: { display: ['Sora', 'sans-serif'], body: ['DM Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <div id="mainSite">
+        <!-- Navigation -->
+        <nav id="nav" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500" style="background:transparent">
+            <div class="max-w-7xl mx-auto px-5 flex items-center justify-between h-16">
+                <a href="#" onclick="scrollToTop()" class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-md shadow-primary/20">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <span class="font-display font-bold text-lg text-ink">CampusHub</span>
+                </a>
+                <div class="hidden md:flex items-center gap-7">
+                    <a href="#events" class="text-sm text-ink-l hover:text-primary transition font-medium">Events</a>
+                    <a href="#categories" class="text-sm text-ink-l hover:text-primary transition font-medium">Categories</a>
+                    <a href="#notices" class="text-sm text-ink-l hover:text-primary transition font-medium">Notices</a>
+                    <a href="#thought" class="text-sm text-ink-l hover:text-primary transition font-medium">Thoughts</a>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <div id="guestBtns" class="flex items-center gap-2">
+                        <button onclick="openM('loginM')" class="btn-o btn-sm hidden sm:inline-flex">Sign In</button>
+                        <button onclick="openM('regM')" class="btn-g btn-sm">Sign Up</button>
+                    </div>
+                    <div id="userBtns" class="hidden items-center gap-2.5">
+                        <button onclick="openM('myRegsM');loadMyRegistrations()" class="btn-o btn-sm hidden sm:inline-flex">
+                            <i class="fas fa-ticket mr-1.5"></i>My Events
+                        </button>
+                        <div class="dropdown">
+                            <button onclick="toggleDD()" class="flex items-center gap-2 bg-white border border-cream-dd rounded-xl px-3 py-2 hover:border-primary transition cursor-pointer">
+                                <div class="w-8 h-8 rounded-lg bg-primary-p flex items-center justify-center">
+                                    <i class="fas fa-user text-primary text-xs"></i>
+                                </div>
+                                <span id="navUN" class="text-sm font-medium text-ink hidden sm:inline"></span>
+                                <i class="fas fa-chevron-down text-[10px] text-muted"></i>
+                            </button>
+                            <div id="ddMenu" class="dd-menu">
+                                <div class="px-4 py-3 border-b border-cream-dd">
+                                    <p id="ddUN" class="text-sm font-semibold text-ink"></p>
+                                    <p id="ddUE" class="text-xs text-muted"></p>
+                                </div>
+                                <div class="dd-item" onclick="openM('myRegsM');loadMyRegistrations();closeDD()"><i class="fas fa-ticket w-4 text-primary"></i>My Registrations</div>
+                                <div class="dd-item" onclick="userOut();closeDD()" style="color:#DC2626"><i class="fas fa-right-from-bracket w-4"></i>Sign Out</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openM('adminLoginM')" class="btn-o btn-sm" title="Admin"><i class="fas fa-shield-halved"></i></button>
+                    <button onclick="toggleMob()" class="md:hidden text-ink text-xl ml-0.5"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="relative w-full h-screen overflow-hidden">
+            <div id="heroSlides">
+                <div class="hero-slide active" style="background:url('https://picsum.photos/seed/campusgreen2/1920/1080') center/cover">
+                    <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(27,67,50,0.88),rgba(45,106,79,0.7))"></div>
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="max-w-7xl mx-auto px-6 w-full">
+                            <div class="max-w-2xl">
+                                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs font-semibold mb-6">
+                                    <span class="pulse-dot"></span>DISCOVER CAMPUS LIFE
+                                </span>
+                                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-800 leading-[1.1] mb-5 text-white">
+                                    Never Miss a <span class="text-accent">Campus Event</span> Again
+                                </h1>
+                                <p class="text-white/75 text-lg mb-8 leading-relaxed max-w-lg">All your college events in one place. Browse, register, and stay connected with everything happening on campus.</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#events" class="btn-a"><i class="fas fa-compass mr-2"></i>Explore Events</a>
+                                    <a href="#categories" class="bg-white/10 backdrop-blur text-white border border-white/20 px-7 py-3 rounded-xl font-semibold text-sm hover:bg-white/20 transition cursor-pointer inline-block">Categories</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+                <div class="hero-dot active" onclick="goSl(0)"></div>
+                <div class="hero-dot" onclick="goSl(1)"></div>
+                <div class="hero-dot" onclick="goSl(2)"></div>
+            </div>
+        </section>
+
+        <!-- Countdown -->
+        <section class="py-14">
+            <div class="max-w-5xl mx-auto px-6 text-center reveal">
+                <p class="text-accent text-xs font-bold uppercase tracking-[3px] mb-2">Next Event</p>
+                <h2 id="cdN" class="font-display text-2xl sm:text-3xl font-bold mb-8 text-ink"></h2>
+                <div class="flex justify-center gap-3 sm:gap-5 flex-wrap">
+                    <div class="cd-box"><div class="cd-num" id="cdD">00</div><div class="text-[10px] text-muted mt-1.5 uppercase tracking-widest font-semibold">Days</div></div>
+                    <div class="cd-box"><div class="cd-num" id="cdH">00</div><div class="text-[10px] text-muted mt-1.5 uppercase tracking-widest font-semibold">Hours</div></div>
+                    <div class="cd-box"><div class="cd-num" id="cdM">00</div><div class="text-[10px] text-muted mt-1.5 uppercase tracking-widest font-semibold">Minutes</div></div>
+                    <div class="cd-box"><div class="cd-num" id="cdS">00</div><div class="text-[10px] text-muted mt-1.5 uppercase tracking-widest font-semibold">Seconds</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events -->
+        <section id="events" class="py-14">
+            <div class="max-w-7xl mx-auto px-6 reveal">
+                <div class="text-center mb-8">
+                    <span class="text-primary text-xs font-bold uppercase tracking-[3px]">Explore</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold mt-2 text-ink">Upcoming Events</h2>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 mb-10 max-w-3xl mx-auto">
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-muted text-sm"></i>
+                        <input type="text" id="sI" placeholder="Search events..." class="fi pl-10" oninput="renderEv()">
+                    </div>
+                    <select id="cF" onchange="renderEv()" class="fi sm:w-48">
+                        <option value="All">All Categories</option>
+                        <option>Technical</option><option>Cultural</option><option>Sports</option><option>Seminar</option><option>Workshop</option>
+                    </select>
+                </div>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" id="evG"></div>
+                <div id="noEv" class="hidden text-center py-16">
+                    <i class="fas fa-calendar-xmark text-4xl text-muted/40 mb-4 block"></i>
+                    <p class="text-muted">No events found matching your criteria</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section id="categories" class="py-14 bg-cream-d">
+            <div class="max-w-7xl mx-auto px-6 reveal">
+                <div class="text-center mb-10">
+                    <span class="text-primary text-xs font-bold uppercase tracking-[3px]">Browse</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold mt-2 text-ink">Event Categories</h2>
+                    <p class="text-muted mt-3 max-w-xl mx-auto">Explore events by category and find what interests you the most</p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div class="cat-card cat-tech" onclick="filterCategory('Technical')">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4"><i class="fas fa-microchip text-2xl text-tech"></i></div>
+                        <h3 class="font-display font-bold text-ink mb-1">Technical</h3><p class="text-xs text-muted">Coding & Tech</p>
+                    </div>
+                    <div class="cat-card cat-cultural" onclick="filterCategory('Cultural')">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-50 flex items-center justify-center mx-auto mb-4"><i class="fas fa-masks-theater text-2xl text-cultural"></i></div>
+                        <h3 class="font-display font-bold text-ink mb-1">Cultural</h3><p class="text-xs text-muted">Arts & Music</p>
+                    </div>
+                    <div class="cat-card cat-sports" onclick="filterCategory('Sports')">
+                        <div class="w-14 h-14 rounded-2xl bg-yellow-50 flex items-center justify-center mx-auto mb-4"><i class="fas fa-trophy text-2xl text-sports"></i></div>
+                        <h3 class="font-display font-bold text-ink mb-1">Sports</h3><p class="text-xs text-muted">Games & Fitness</p>
+                    </div>
+                    <div class="cat-card cat-seminar" onclick="filterCategory('Seminar')">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto mb-4"><i class="fas fa-chalkboard-teacher text-2xl text-seminar"></i></div>
+                        <h3 class="font-display font-bold text-ink mb-1">Seminar</h3><p class="text-xs text-muted">Talks & Lectures</p>
+                    </div>
+                    <div class="cat-card cat-workshop" onclick="filterCategory('Workshop')">
+                        <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center mx-auto mb-4"><i class="fas fa-tools text-2xl text-workshop"></i></div>
+                        <h3 class="font-display font-bold text-ink mb-1">Workshop</h3><p class="text-xs text-muted">Hands-on Learning</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notices -->
+        <section id="notices" class="py-14">
+            <div class="max-w-7xl mx-auto px-6 reveal">
+                <div class="text-center mb-10">
+                    <span class="text-primary text-xs font-bold uppercase tracking-[3px]">Announcements</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-bold mt-2 text-ink">Latest Notices</h2>
+                    <p class="text-muted mt-3">Stay updated with important college announcements</p>
+                </div>
+                <div id="noticesList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                <div id="noNotices" class="text-center py-16">
+                    <i class="fas fa-bell-slash text-4xl text-muted/40 mb-4 block"></i>
+                    <p class="text-muted">No notices yet</p>
+                </div>
+            </div>
+        </section>
+        <!-- Thoughts Section -->
+<section id="thought" class="py-14 bg-cream-d">
+  <div class="max-w-7xl mx-auto px-6 reveal">
+    <div class="text-center mb-10">
+      <span class="text-primary text-xs font-bold uppercase tracking-[3px]">Community</span>
+      <h2 class="font-display text-3xl sm:text-4xl font-bold mt-2 text-ink">Student Thoughts</h2>
+      <p class="text-muted mt-3">Share your experience and encourage fellow students</p>
+    </div>
+
+    <!-- Post thought box - sirf logged in users ke liye -->
+    <div id="thoughtForm" class="hidden max-w-2xl mx-auto mb-10">
+      <div class="bg-white rounded-2xl border border-cream-dd p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-primary-p flex items-center justify-center">
+            <i class="fas fa-user text-primary text-sm"></i>
+          </div>
+          <span id="thoughtUserName" class="font-semibold text-ink"></span>
+        </div>
+        <textarea id="thoughtMsg" class="fi mb-3" placeholder="Share your thoughts, experiences or encouragement..." rows="3"></textarea>
+        <button onclick="postThought()" class="btn-g w-full">
+          <i class="fas fa-paper-plane mr-2"></i>Share Thought
+        </button>
+      </div>
+    </div>
+
+    <!-- Login prompt for guests -->
+    <div id="thoughtLoginPrompt" class="max-w-2xl mx-auto mb-10 text-center">
+      <div class="bg-white rounded-2xl border border-cream-dd p-6">
+        <i class="fas fa-lock text-muted text-2xl mb-3 block"></i>
+        <p class="text-muted text-sm mb-3">Login to share your thoughts</p>
+        <button onclick="openM('loginM')" class="btn-g">Sign In to Share</button>
+      </div>
+    </div>
+
+    <!-- Thoughts list -->
+    <div id="thoughtsList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    <div id="noThoughts" class="hidden text-center py-16">
+      <i class="fas fa-comment-slash text-4xl text-muted/40 mb-4 block"></i>
+      <p class="text-muted">No thoughts yet — be the first!</p>
+    </div>
+  </div>
+</section>
+
+    </div><!-- End mainSite -->
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Admin Login -->
+    <div id="adminLoginM" class="modal-bg" onclick="if(event.target===this)closeM('adminLoginM')">
+        <div class="modal-box bg-white rounded-2xl w-full max-w-sm mx-4 p-8 shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-ink flex items-center justify-center mx-auto mb-4"><i class="fas fa-shield-halved text-white text-xl"></i></div>
+                <h3 class="font-display text-xl font-bold text-ink">Admin Login</h3>
+            </div>
+            <div class="space-y-4">
+                <div><label class="text-xs text-muted uppercase tracking-wider font-semibold block mb-1.5">Username</label><input type="text" id="aU" class="fi" placeholder="admin"></div>
+                <div><label class="text-xs text-muted uppercase tracking-wider font-semibold block mb-1.5">Password</label><input type="password" id="aP" class="fi" placeholder="********" onkeydown="if(event.key==='Enter')aLogin()"></div>
+                <button onclick="aLogin()" class="btn-g w-full" style="background:#1A1A2E">Sign In to Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up -->
+    <div id="regM" class="modal-bg" onclick="if(event.target===this)closeM('regM')">
+        <div class="modal-box bg-white rounded-2xl w-full max-w-md mx-4 p-8 shadow-2xl">
+            <div class="text-center mb-6"><h3 class="font-display text-xl font-bold text-ink">Create Account</h3></div>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="rN" class="fi" placeholder="Full Name">
+                    <input type="tel" id="rPh" class="fi" placeholder="Phone">
+                </div>
+                <input type="email" id="rE" class="fi" placeholder="Email">
+                <div class="grid grid-cols-2 gap-3">
+                    <select id="rDe" class="fi">
+                        <option value="">Department</option>
+                        <option>MCA(management)</option><option>MBA</option><option>Mechanical</option><option>Civil</option><option>MCA</option>
+                    </select>
+                    <select id="rY" class="fi">
+                        <option value="">Year</option>
+                        <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option>
+                    </select>
+                </div>
+                <input type="password" id="rPa" class="fi" placeholder="Password">
+                <button onclick="doReg()" class="btn-g w-full">Create Account</button>
+                <p class="text-center text-sm text-muted">Already have an account? <span onclick="closeM('regM');openM('loginM')" class="text-primary font-semibold cursor-pointer">Sign In</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In -->
+    <div id="loginM" class="modal-bg" onclick="if(event.target===this)closeM('loginM')">
+        <div class="modal-box bg-white rounded-2xl w-full max-w-md mx-4 p-8 shadow-2xl">
+            <div class="text-center mb-6"><h3 class="font-display text-xl font-bold text-ink">Sign In</h3></div>
+            <div class="space-y-4">
+                <input type="email" id="lE" class="fi" placeholder="Email">
+                <input type="password" id="lP" class="fi" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+                <button onclick="doLogin()" class="btn-g w-full">Sign In</button>
+                <p class="text-center text-sm text-muted">Don't have an account? <span onclick="closeM('loginM');openM('regM')" class="text-primary font-semibold cursor-pointer">Sign Up</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Registration -->
+    <div id="eventRegM" class="modal-bg" onclick="if(event.target===this)closeM('eventRegM')">
+        <div class="modal-box bg-white rounded-2xl w-full max-w-md mx-4 p-8 shadow-2xl">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-primary-p flex items-center justify-center mx-auto mb-4"><i class="fas fa-ticket text-primary text-xl"></i></div>
+                <h3 class="font-display text-xl font-bold text-ink">Register for Event</h3>
+                <p id="eventRegTitle" class="text-accent font-semibold text-sm mt-1"></p>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="erName" class="fi" placeholder="Full Name">
+                <input type="text" id="erStream" class="fi" placeholder="Stream (e.g. MCA)">
+                <input type="tel" id="erPhone" class="fi" placeholder="Phone Number">
+                <input type="email" id="erEmail" class="fi" placeholder="Email">
+                <input type="hidden" id="erEventId">
+                <button onclick="submitEventReg()" class="btn-g w-full"><i class="fas fa-check mr-2"></i>Confirm Registration</button>
+                <button onclick="closeM('eventRegM')" class="btn-o w-full">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Events -->
+    <div id="myRegsM" class="modal-bg" onclick="if(event.target===this)closeM('myRegsM')">
+        <div class="modal-box bg-white rounded-2xl w-full max-w-lg mx-4 p-8 shadow-2xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-display text-xl font-bold text-ink">My Registered Events</h3>
+                <button onclick="closeM('myRegsM')" class="text-muted hover:text-ink"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div id="myRegsList" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanelM" class="modal-bg" onclick="if(event.target===this)closeM('adminPanelM')">
+        <div class="modal-box bg-white rounded-2xl w-full max-w-3xl mx-4 shadow-2xl">
+            <div class="flex items-center justify-between p-6 border-b border-cream-dd">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-ink flex items-center justify-center"><i class="fas fa-shield-halved text-white text-sm"></i></div>
+                    <h3 class="font-display text-xl font-bold text-ink">Admin Dashboard</h3>
+                </div>
+                <button onclick="closeM('adminPanelM')" class="text-muted hover:text-ink"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="flex border-b border-cream-dd">
+                <button onclick="switchTab('Events')" id="tabEvents" class="flex-1 py-3 text-sm font-semibold text-primary border-b-2 border-primary"><i class="fas fa-calendar mr-2"></i>Events</button>
+                <button onclick="switchTab('Notices')" id="tabNotices" class="flex-1 py-3 text-sm font-semibold text-muted border-b-2 border-transparent"><i class="fas fa-bell mr-2"></i>Notices</button>
+                <button onclick="switchTab('Registrations')" id="tabRegistrations" class="flex-1 py-3 text-sm font-semibold text-muted border-b-2 border-transparent"><i class="fas fa-users mr-2"></i>Registrations</button>
+            </div>
+            <!-- Events Tab -->
+            <div id="tabContentEvents" class="p-6">
+                <h4 class="font-semibold text-ink mb-4">Add New Event</h4>
+                <div class="space-y-3 mb-6">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="aTitle" class="fi" placeholder="Event Title">
+                        <select id="aCat" class="fi"><option value="">Category</option><option>Technical</option><option>Cultural</option><option>Sports</option><option>Seminar</option><option>Workshop</option></select>
+                    </div>
+                    <textarea id="aDesc" class="fi" placeholder="Description" rows="2"></textarea>
+                    <div class="grid grid-cols-2 gap-3"><input type="date" id="aDate" class="fi"><input type="time" id="aTime" class="fi"></div>
+                    <div class="grid grid-cols-2 gap-3"><input type="text" id="aVenue" class="fi" placeholder="Venue"><input type="number" id="aSeats" class="fi" placeholder="Seats" value="100"></div>
+                    <button onclick="adminAddEvent()" class="btn-g w-full"><i class="fas fa-plus mr-2"></i>Add Event</button>
+                </div>
+                <h4 class="font-semibold text-ink mb-3">Manage Events</h4>
+                <div id="adminEvList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+            </div>
+            <!-- Notices Tab -->
+            <div id="tabContentNotices" class="p-6 hidden">
+                <h4 class="font-semibold text-ink mb-4">Add New Notice</h4>
+                <div class="space-y-3 mb-6">
+                    <input type="text" id="nTitle" class="fi" placeholder="Notice Title">
+                    <textarea id="nContent" class="fi" placeholder="Notice content..." rows="3"></textarea>
+                    <button onclick="adminAddNotice()" class="btn-g w-full"><i class="fas fa-bell mr-2"></i>Post Notice</button>
+                </div>
+                <h4 class="font-semibold text-ink mb-3">Manage Notices</h4>
+                <div id="adminNoticeList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+            </div>
+            <!-- Registrations Tab -->
+            <div id="tabContentRegistrations" class="p-6 hidden">
+                <h4 class="font-semibold text-ink mb-4">All Event Registrations</h4>
+                <div id="adminRegsList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
