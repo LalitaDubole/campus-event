@@ -55,7 +55,7 @@ through a dedicated dashboard.
 ### Steps
 
 1. **Clone the repository**
-   git clone https://github.com/yourusername/CampusHub.git
+   git clone https://github.com/LalitaDubole/CampusHub.git
    cd CampusHub
 
 2. **Install dependencies**
